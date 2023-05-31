@@ -1,5 +1,5 @@
 # Use an appropriate base image for Java and Maven
-FROM maven:3.8.4-openjdk-16
+FROM adoptopenjdk:11-jdk-hotspot
 
 # Set the working directory inside the container
 WORKDIR /app
