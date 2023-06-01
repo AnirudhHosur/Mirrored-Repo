@@ -19,11 +19,12 @@ build:
 test:
   stage: test
   image: maven:latest
+  script:
+    - cd cicd
   artifacts:
     when: always
     reports:
       junit:
-        - cd cicd
         - target/TEST_*.xml
 
   script:
