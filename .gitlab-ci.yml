@@ -12,7 +12,7 @@ build:
     - mvn package -DskipTests=true
   artifacts:
     paths:
-      - target
+      - target/cicd-0.0.1-SNAPSHOT.jar
   tags:
     - ugrad
 
