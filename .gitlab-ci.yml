@@ -46,6 +46,7 @@ deploy_develop:
     - echo "dbDriver=$DATABASE_DRIVER" >> config.properties
     - echo "Deploying the develop pipeline"
     - chmod og-rwx ${DEPLOY_SSH_KEY}
+    - cd cicd
     - zip -r ${CI_COMMIT_SHORT_SHA}.zip target
     - scp -r -o StrictHostKeyChecking=no -i "${DEPLOY_SSH_KEY}" ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.zip"
   only:
@@ -65,6 +66,7 @@ deploy_release:
     - echo "dbDriver=$DATABASE_DRIVER" >> config.properties
     - echo "Deploying the release pipeline"
     - chmod og-rwx ${DEPLOY_PROD_SSH_KEY}
+    - cd cicd
     - zip -r ${CI_COMMIT_SHORT_SHA}.zip target
     - scp -r -o StrictHostKeyChecking=no -i "${DEPLOY_PROD_SSH_KEY}" ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_PROD_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.zip"
   only:
