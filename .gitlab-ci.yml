@@ -23,7 +23,8 @@ test:
     when: always
     reports:
       junit:
-        - cicd/target/TEST_*.xml
+        - cd cicd
+        - target/TEST_*.xml
 
   script:
     - echo "Pipeline test started"
