@@ -9,7 +9,7 @@ build:
   script:
     - echo "Building the pipeline"
     - cd cicd
-    - cp src/* .
+    - cp -r src/* .
     - mvn clean package
   artifacts:
     paths:
