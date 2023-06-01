@@ -12,7 +12,8 @@ build:
     - mvn install -B
   artifacts:
     paths:
-      - target/cicd-0.0.1-SNAPSHOT.jar
+      - target
+      # - target/cicd-0.0.1-SNAPSHOT.jar
   tags:
     - ugrad
 
@@ -23,7 +24,7 @@ test:
     when: always
     reports:
       junit:
-        - target/TEST_*.xml
+        - target/cicd/TEST_*.xml
 
   script:
     - echo "Pipeline test started"
@@ -45,31 +46,31 @@ deploy_develop:
     - echo "dbPassword=$DATABASE_TEST_PASSWORD" >> config.properties
     - echo "dbDriver=$DATABASE_DRIVER" >> config.properties
     - echo "Deploying the develop pipeline"
+    - echo "${CI_COMMIT_SHORT_SHA}.zip target"
+    - echo ""${DEPLOY_SSH_KEY}" ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.zip""
     - chmod og-rwx ${DEPLOY_SSH_KEY}
     - cd cicd
     - zip -r ${CI_COMMIT_SHORT_SHA}.zip target
-    - echo "${CI_COMMIT_SHORT_SHA}.zip target"
     - scp -r -o StrictHostKeyChecking=no -i "${DEPLOY_SSH_KEY}" ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.zip"
-    - echo ""${DEPLOY_SSH_KEY}" ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.zip""
   only:
     - develop
 
-deploy_release:
-  stage: deploy
-  tags:
-    - ugrad
-  artifacts:
-    paths:
-      - target
-  script:
-    - echo "dbURL=$DATABASE_PROD_URL" > config.properties
-    - echo "dbUserName=$DATABASE_PROD_USERNAME" >> config.properties
-    - echo "dbPassword=$DATABASE_PROD_PASSWORD" >> config.properties
-    - echo "dbDriver=$DATABASE_DRIVER" >> config.properties
-    - echo "Deploying the release pipeline"
-    - chmod og-rwx ${DEPLOY_PROD_SSH_KEY}
-    - cd cicd
-    - zip -r ${CI_COMMIT_SHORT_SHA}.zip target
-    - scp -r -o StrictHostKeyChecking=no -i "${DEPLOY_PROD_SSH_KEY}" ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_PROD_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.zip"
-  only:
-    - release
+# deploy_release:
+#   stage: deploy
+#   tags:
+#     - ugrad
+#   artifacts:
+#     paths:
+#       - target
+#   script:
+#     - echo "dbURL=$DATABASE_PROD_URL" > config.properties
+#     - echo "dbUserName=$DATABASE_PROD_USERNAME" >> config.properties
+#     - echo "dbPassword=$DATABASE_PROD_PASSWORD" >> config.properties
+#     - echo "dbDriver=$DATABASE_DRIVER" >> config.properties
+#     - echo "Deploying the release pipeline"
+#     - chmod og-rwx ${DEPLOY_PROD_SSH_KEY}
+#     - cd cicd
+#     - zip -r ${CI_COMMIT_SHORT_SHA}.zip target
+#     - scp -r -o StrictHostKeyChecking=no -i "${DEPLOY_PROD_SSH_KEY}" ${CI_COMMIT_SHORT_SHA}.zip "${DEPLOY_PROD_USER}@${DEPLOY_HOST}:${DEPLOY_DIR}/${CI_PROJECT_NAME}-${CI_COMMIT_REF_NAME}-${CI_COMMIT_SHORT_SHA}.zip"
+#   only:
+#     - release
