@@ -5,7 +5,7 @@ stages:
 
 build:
   stage: build
-  image: maven:latest
+  image: maven:3.8.7-openjdk-18-slim
   script:
     - echo "Building the pipeline"
     - cd cicd
