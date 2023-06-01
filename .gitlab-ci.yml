@@ -5,11 +5,13 @@ stages:
 
 build:
   stage: build
-  image: openjdk:18-alpine
+  image:
+    name: maven:3.8.7-openjdk-11-slim
+    entrypoint: ["/bin/bash", "-lc"]
   script:
     - echo "Building the pipeline"
-    - cd cicd
-    - mvn clean package
+    - export JAVA_HOME=/usr/local/openjdk-11
+    - mvn clean package -DskipTests=true
   artifacts:
     paths:
       - target/cicd-0.0.1-SNAPSHOT.jar
