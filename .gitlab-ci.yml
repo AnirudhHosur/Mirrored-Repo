@@ -6,8 +6,6 @@ stages:
 build:
   stage: build
   image: maven:3-jdk-11
-  variables:
-    JAVA_HOME: "/usr/local/openjdk-11"
   script:
     - echo "Building the pipeline"
     - cd cicd
