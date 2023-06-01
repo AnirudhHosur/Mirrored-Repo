@@ -19,8 +19,6 @@ build:
 test:
   stage: test
   image: maven:latest
-  script:
-    - cd cicd
   artifacts:
     when: always
     reports:
@@ -29,6 +27,7 @@ test:
 
   script:
     - echo "Pipeline test started"
+    - cd cicd
     - mvn verify
   tags:
     - ugrad
